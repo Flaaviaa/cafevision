@@ -76,6 +76,9 @@ GPIO Pin: 17
 Component: Button  
 GPIO Pin: 27
 
+This pinout follows the raspberry GPIO Header:
+![image](https://github.com/user-attachments/assets/4d3b0fa5-9b46-4ce0-ba8d-7b694f62e267)
+
 ## Next Steps
 
 - Add a camera module or webcam to capture coffee cherry photos.
