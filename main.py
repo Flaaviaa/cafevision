@@ -1,7 +1,6 @@
 from signal import pause
-from acender_led import ChangeLedState
+from button_handler import ButtonHandler
 
-led_control = ChangeLedState()
-
+system = ButtonHandler(button_pin = 27, led_pin = 17, device_index = 0)
 pause()
 
