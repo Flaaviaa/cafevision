@@ -34,14 +34,12 @@ Currently, the project contains:
 
 ## 🧠 Current Functionality
 
-✅ Control a LED using a push button connected to the Raspberry Pi GPIO pins:
+✅ Control a LED and camera using a push button connected to the Raspberry Pi GPIO pins:
 
 - **LED** connected to **GPIO 17**
 - **Button** connected to **GPIO 27**
-- Each button press toggles the LED state (on/off).
-
-The `ChangeLedState` class handles all the LED and button logic.  
-The `main.py` script instantiates the class and keeps the system running.
+- **Camera** connected to **USB**
+- Each button press toggles the LED state (on/off) and take 3 pictures with the camera.
 
 ---
 
@@ -76,14 +74,15 @@ GPIO Pin: 17
 Component: Button  
 GPIO Pin: 27
 
+Component: Camera
+USB
+
 This pinout follows the raspberry GPIO Header:
 ![image](https://github.com/user-attachments/assets/4d3b0fa5-9b46-4ce0-ba8d-7b694f62e267)
 
 ## Next Steps
 
-- Add a camera module or webcam to capture coffee cherry photos.
 - Add a load cell module to measure coffee bean weight.
 - Add a humidity sensor to measure environmental conditions.
 - Create a database to store captured information.
 - Build a web dashboard to visualize collected data.
-
