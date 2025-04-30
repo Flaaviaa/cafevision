@@ -58,7 +58,7 @@ def gerarimagem(filename):
 
    	        output_directory = "api"
     	 	if not os.path.exists(output_directory):
-        	 os.makedirs(output_directory)
+        	  os.makedirs(output_directory)
 
     		output_file_path = os.path.join(output_directory, "resultado.json")
                 with open(output_file_path, 'w') as json_file:
