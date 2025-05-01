@@ -39,8 +39,9 @@ def gerarimagem(filename):
     rf = Roboflow(api_key="sIfKQIjbxPJfJo1lu4Bc")
     project = rf.workspace().project("coffee-fruit-maturity-befkg")
     model = project.version(2).model
+
     print(f"Photo {filename} initialized and ready.")
-    
+
     image_path = filename
 
     if image_path:
@@ -51,6 +52,7 @@ def gerarimagem(filename):
 
         result['class_counts'] = class_counts
         result['confidence_counts'] = confidence_counts
+
 
         output_directory = "API"
         if not os.path.exists(output_directory):
@@ -63,6 +65,7 @@ def gerarimagem(filename):
             json.dump(result, json_file, indent=4)
 
         draw_bounding_boxes_with_contours(image_path, output_file_path,image_name)
+
         print(f"Resultado salvo em {output_file_path}")
     else:
         print("Nenhuma imagem foi selecionada.")

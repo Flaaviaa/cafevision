@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def draw_bounding_boxes_with_contours(image_path, json_path,output_image_path):
+
     image = cv2.imread(image_path)
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
@@ -35,7 +36,7 @@ def draw_bounding_boxes_with_contours(image_path, json_path,output_image_path):
 
     plt.axis('off')
 
-    # Salvar a imagem com textos
+
     plt.savefig(f"API/{output_image_path}-analisada.png", bbox_inches='tight', pad_inches=0, transparent=True)  # Salvar a imagem 
 
   
