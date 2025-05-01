@@ -17,5 +17,7 @@ class ButtonHandler:
 				filename = f"photo_{i}.png"
 				self.camera.capture_photo(filename)
 				sleep(1)
+				print(f"Photo {filename} initialized and ready.")
+
 	def release_resources(self):
 		self.camera.release_camera()

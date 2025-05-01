@@ -1,4 +1,5 @@
 import cv2
+from API.ConsumoApi import gerarimagem
 
 class Camera:
 	def __init__(self, device_index = 0):
@@ -13,6 +14,8 @@ class Camera:
 		ret, frame = self.camera.read()
 		if ret:
 			cv2.imwrite(filename, frame)
+			gerarimagem(filename)
+
 			print(f"Photo saved as {filename}")
 		else: print("Failed to capture image.")
 
