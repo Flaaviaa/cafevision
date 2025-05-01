@@ -1,12 +1,9 @@
-from gpiozero import LED, Button
+from gpiozero import LED
 
 class ChangeLedState:
-	def __init__(self, led_pin=17, button_pin=27):
+	def __init__(self, led_pin=17):
 		self.led = LED(led_pin)
-		self.button = Button(button_pin)
 		self.led_state = False
-
-		self.button.when_pressed = self.change_led_state
 
 	def change_led_state(self):
 		if self.led_state:
