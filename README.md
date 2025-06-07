@@ -10,11 +10,6 @@ The system will perform the following tasks:
 - ⚖️ Measure the weight of the coffee beans
 - 🌡️ Measure the humidity of the coffee beans
 
-Currently, the project contains:
-
-- **ChangeLedState** class (located in `acender_led.py`)
-- **main.py** script to integrate and run the system.
-
 ---
 
 ## 🛠️ Hardware Requirements
@@ -25,21 +20,10 @@ Currently, the project contains:
 - Push Button
 - LED
 - Resistor (220Ω for the LED)
-- USB Webcam (for image capture - coming soon)
+- USB Webcam (for image capture)
 - Load Cell (for weight measurement - coming soon)
-- Humidity Sensor (for humidity measurement - coming soon)
+- Humidity Sensor (for humidity measurement - AHT21)
 - Breadboard and Jumper Wires
-
----
-
-## 🧠 Current Functionality
-
-✅ Control a LED and camera using a push button connected to the Raspberry Pi GPIO pins:
-
-- **LED** connected to **GPIO 17**
-- **Button** connected to **GPIO 27**
-- **Camera** connected to **USB**
-- Each button press toggles the LED state (on/off) and take 3 pictures with the camera.
 
 ---
 
@@ -65,24 +49,56 @@ sudo apt install python3-gpiozero
 python3 main.py
 ```
 
-
 ## GPIO Pinout
 
-Component: LED  
-GPIO Pin: 17
+- component: Load Cell
 
-Component: Button  
-GPIO Pin: 27
+```plaintext
+VCC     -> 5V  
+GND     -> GND  
+PIN_DAT -> GPIO5   # DOUT (DT) - Physical pin 29  
+PIN_CLK -> GPIO6   # SCK       - Physical pin 31
+```
 
-Component: Camera
+---------
+
+- component: display
+
+```plaintext
+CS   = GPIO8  
+DC   = GPIO25  
+RST  = GPIO24  
+MOSI = GPIO10  
+SCK  = GPIO11  
+VCC  = 3.3V  
+GND  = GND  
+LED  = 3.3V
+```
+---------
+- Component: Camera
+```plaintext
 USB
+```
+---------
+- component: TouchScreen
+```plaintext
+T_IRQ = GPIO15  
+T_CS  = GPIO7
+```
+---------
+- component: Motor
+```plaintext
+mosfet_pin = GPIO17
+```
+---------
+- component: humidity sensor (AHT21)
+```plaintext
+VCC = 3.3V
+GND = GND
+SDA = GPIO02
+SCL = GPIO03
+```
+---------
 
 This pinout follows the raspberry GPIO Header:
 ![image](https://github.com/user-attachments/assets/4d3b0fa5-9b46-4ce0-ba8d-7b694f62e267)
-
-## Next Steps
-
-- Add a load cell module to measure coffee bean weight.
-- Add a humidity sensor to measure environmental conditions.
-- Create a database to store captured information.
-- Build a web dashboard to visualize collected data.
