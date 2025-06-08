@@ -1,0 +1,29 @@
+Célula de carga:
+
+VCC = 5V
+GND = GND
+PIN_DAT = 5   # DOUT (DT) (GPIO5 - Pino físico 29)
+PIN_CLK = 6   # SCK (GPIO6 - Pino físico 31)
+
+---------
+Display:
+
+CS: GPIO8
+DC: GPIO25
+RST: GPIO24
+MOSI: GPIO10
+SCK: GPIO11
+VCC: 3,3V
+GND: GND
+LED: 3,3V
+
+---------
+TouchScreen:
+
+T_IRQ: GPIO15
+T_CS: GPIO7
+
+---------
+Motor:
+
+pino_mosfet: GPIO17
