@@ -10,6 +10,7 @@ from componentes.carga import get_peso
 from componentes.camera import Camera
 from componentes.motor import vibration
 from time import sleep
+from componentes.aht21 import get_temperature, get_humidity
 # ===============================
 # Configuração do DISPLAY
 # ===============================
@@ -110,9 +111,17 @@ def mostrar_parametros():
     peso_g=get_peso()
     peso = f"peso {peso_g:.1f}"
     w1, h1 = medir_texto(draw, peso, font_media)
+    temperatura = get_temperature()
+    temperature = f"temperatura {temperatura:.2f}"
+    w2, h2 = medir_texto(draw, temperature, font_media)
+    umidade = get_humidity()
+    humidity = f"umidade {umidade:.2f}"
+    w3, h3 = medir_texto(draw, humidity, font_media)
 
     y_inicio = 80
     draw.text(((320 - w1) // 2, y_inicio), peso, font=font_media, fill=BRANCO)
+    draw.text(((320 - w2) // 2, y_inicio + h1 + 10), temperature, font=font_media, fill=BRANCO)
+    draw.text(((320 - w3) // 2, y_inicio + h2 + 10), humidity, font=font_media, fill=BRANCO)
 
     if peso_g > 100 :
         handle_button_press()
