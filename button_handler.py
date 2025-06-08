@@ -1,6 +1,6 @@
 from gpiozero import Button
 from acender_led import ChangeLedState
-from camera import Camera
+from componentes.camera import Camera
 from time import sleep
 
 class ButtonHandler:

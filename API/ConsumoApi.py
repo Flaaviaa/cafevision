@@ -41,7 +41,6 @@ def gerarimagem(filename):
     model = project.version(2).model
 
     print(f"Photo {filename} initialized and ready.")
-
     image_path = filename
 
     if image_path:
@@ -52,7 +51,6 @@ def gerarimagem(filename):
 
         result['class_counts'] = class_counts
         result['confidence_counts'] = confidence_counts
-
 
         output_directory = "API"
         if not os.path.exists(output_directory):
