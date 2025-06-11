@@ -59,7 +59,8 @@ spi_touch.mode = 0b00
 # ===============================
 
 MARROM = (19, 69, 139)
-BRANCO = (255, 255, 255)
+PRETO = (255, 255, 255)
+BRANCO = (0, 0, 0)
 
 font_grande = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 32)
 font_media = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
@@ -82,51 +83,52 @@ def is_touching():
 # ===============================
 
 def mostrar_texto_inicial():
-    image = Image.new("RGB", (320, 240), MARROM)
+    image = Image.new("RGB", (320, 240), BRANCO)
     draw = ImageDraw.Draw(image)
 
     texto1 = "CafeVision"
     w1, h1 = medir_texto(draw, texto1, font_grande)
-    draw.text(((320 - w1) // 2, 20), texto1, font=font_grande, fill=BRANCO)
+    draw.text(((320 - w1) // 2, 20), texto1, font=font_grande, fill=PRETO)
 
     texto2 = "Carregando"
     w2, h2 = medir_texto(draw, texto2, font_media)
-    draw.text(((320 - w2) // 2, 240 - h2 - 20), texto2, font=font_media, fill=BRANCO)
+    draw.text(((320 - w2) // 2, 240 - h2 - 20), texto2, font=font_media, fill=PRETO)
 
     display.image(image)
 
 def mostrar_mensagem_toque():
-    image = Image.new("RGB", (320, 240), MARROM)
+    image = Image.new("RGB", (320, 240), BRANCO)
     draw = ImageDraw.Draw(image)
 
     texto = "Toque na tela para iniciar"
     w, h = medir_texto(draw, texto, font_media)
-    draw.text(((320 - w) // 2, (240 - h) // 2), texto, font=font_media, fill=BRANCO)
+    draw.text(((320 - w) // 2, (240 - h) // 2), texto, font=font_media, fill=PRETO)
 
     display.image(image)
 
 def mostrar_parametros():
-    image = Image.new("RGB", (320, 240), MARROM)
+    image = Image.new("RGB", (320, 240), BRANCO)
     draw = ImageDraw.Draw(image)
     peso_g=get_peso()
-    peso = f"peso {peso_g:.1f}"
+    peso = f"Peso {peso_g:.1f}"
     w1, h1 = medir_texto(draw, peso, font_media)
     temperatura = get_temperature()
-    temperature = f"temperatura {temperatura:.2f}"
+    temperature = f"Temperatura {temperatura:.2f}"
     w2, h2 = medir_texto(draw, temperature, font_media)
     umidade = get_humidity()
-    humidity = f"umidade {umidade:.2f}"
+    humidity = f"Umidade {umidade:.2f}"
     w3, h3 = medir_texto(draw, humidity, font_media)
 
     y_inicio = 80
-    draw.text(((320 - w1) // 2, y_inicio), peso, font=font_media, fill=BRANCO)
-    draw.text(((320 - w2) // 2, y_inicio + h1 + 10), temperature, font=font_media, fill=BRANCO)
-    draw.text(((320 - w3) // 2, y_inicio + h2 + 10), humidity, font=font_media, fill=BRANCO)
-
+    draw.text(((320 - w1) // 2, y_inicio), peso, font=font_media, fill=PRETO)
+    draw.text(((320 - w2) // 2, y_inicio + h1 + 10), temperature, font=font_media, fill=PRETO)
+    draw.text(((320 - w3) // 2, y_inicio + h3 + 50), humidity, font=font_media, fill=PRETO)
+    display.image(image)
+    
     if peso_g > 100 :
         handle_button_press()
 
-    display.image(image)
+   
     print("Toque")
 # ===============================
 # Programa Principal
@@ -145,24 +147,24 @@ def handle_button_press():
     
 def main():
         try:
-            mostrar_texto_inicial()
-            time.sleep(3)
+           while True: 
+                mostrar_texto_inicial()
+                time.sleep(3)
 
-            mostrar_mensagem_toque()
+                mostrar_mensagem_toque()
 
-            print("Aguardando toque na tela...")
-            while not is_touching():
-                time.sleep(0.05)
+                print("Aguardando toque na tela...")
+                while not is_touching():
+                    time.sleep(0.05)
 
-            # Aguarda soltar para não repetir
-            while is_touching():
-                time.sleep(0.05)
+                # Aguarda soltar para não repetir
+                while is_touching():
+                    time.sleep(0.05)
 
-            mostrar_parametros()
+                mostrar_parametros()
 
-            # Mantém a tela ligada
-            while True:
-                time.sleep(1)
+                # Mantém a tela ligada
+                
 
         except KeyboardInterrupt:
             print("\nEncerrando...")
