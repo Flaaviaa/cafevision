@@ -1,7 +1,4 @@
 chave.txt
-API/photo_1-analisada.png
-API/photo_2-analisada.png
-API/photo_3-analisada.png
-API/resultado_photo_1.json
-API/resultado_photo_2.json
-API/resultado_photo_3.json
+API/*.png
+API/*.json
+API/*.jpg
