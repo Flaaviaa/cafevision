@@ -12,6 +12,9 @@ from componentes.motor import vibration
 from time import sleep
 from componentes.aht21 import get_temperature, get_humidity
 from API.ConsumoApi import gerarimagem
+from API.analasyapi import enviar_para_api
+from API.configapi import salvar_configuracao
+import configparser
 # ===============================
 # Configuração do DISPLAY
 # ===============================
@@ -39,7 +42,7 @@ display = st7789.ST7789(
 # ===============================
 # Configuração do TOUCHSCREEN
 # ===============================
-
+resultados = []
 # Pinos do touchscreen
 T_CS = 7       # Chip Select
 T_IRQ = 15     # Interrupção de toque (LOW quando pressionado)
@@ -62,6 +65,8 @@ spi_touch.mode = 0b00
 MARROM = (19, 69, 139)
 PRETO = (255, 255, 255)
 BRANCO = (0, 0, 0)
+VERDE = (0,255,0)
+VERMELHO = (255,0, 0)
 
 font_grande = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 32)
 font_media = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
@@ -108,21 +113,131 @@ def mostrar_mensagem_toque():
     display.image(image)
 
 
-def mostrar_resultados():
+
+    
+
+def calcular_media_global():
+    global resultados
+
+    soma = {}
+    contagem = {}
+
+    for resultado in resultados:
+        if not resultado:
+            continue
+        for classe, valor in resultado.items():
+            soma[classe] = soma.get(classe, 0) + valor
+            contagem[classe] = contagem.get(classe, 0) + 1
+
+    medias = {}
+    for classe in soma:
+        medias[classe] = round(soma[classe] / contagem[classe], 2)
+
+    return medias
+
+def mostrar_resultados_final():
+    global resultados
+
     image = Image.new("RGB", (320, 240), BRANCO)
     draw = ImageDraw.Draw(image)
-    
 
-    result=gerarimagem('API/2.jpg')
-    w1, h1 = medir_texto(draw, result, font_media)
+    texto = "RESULTADO FINAL"
+    w, h = medir_texto(draw, texto, font_media)
+    y_inicio = 50
+    x = (320 - w) // 2
+    draw.text((x, y_inicio), texto, font=font_media, fill=PRETO)
 
-
+    medias = calcular_media_global()
+    espaco_linha = 30
     y_inicio = 80
-    draw.text(((320 - w1) // 2, y_inicio), result, font=font_media, fill=PRETO)
-    display.image(image)
-    
-    
 
+    for i, (classe, valor) in enumerate(medias.items()):
+        texto = f"{classe}: {valor:.2f}%"
+        w, h = medir_texto(draw, texto, font_media)
+        x = (320 - w) // 2
+        y = y_inicio + i * espaco_linha
+        draw.text((x, y), texto, font=font_media, fill=PRETO)
+
+    display.image(image)
+    sleep(10)
+
+
+
+def status():
+
+    # Usa a função que já calcula as médias globais
+    medias = calcular_media_global()
+
+    # Lê o config.ini
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+
+    if 'CONFIGURATION' not in config:
+        return "⚠️ Configuração não encontrada."
+
+    limites = {k: float(v) for k, v in config['CONFIGURATION'].items()}
+
+    texto= "APROVADO"
+    status_t=1
+    # Verifica se todas as médias atingem os limites
+    for classe, limite in limites.items():
+        if classe in medias:
+            media = medias[classe]
+            if media < limite:
+                print(f"Classe: {classe} | Média: {media:.2f}% | Limite: {limite:.2f}% ❌")
+                texto= "REPROVADO"
+                status_t=0
+
+    image = Image.new("RGB", (320, 240), BRANCO)
+    draw = ImageDraw.Draw(image)
+
+    w, h = medir_texto(draw, texto, font_media)
+    y_inicio = 50   
+    x = (320 - w) // 2 
+    cor = VERDE if status_t == 1 else VERMELHO
+    draw.text((x, y_inicio), texto, font=font_media, fill=cor)
+
+    display.image(image)
+    sleep(10)
+    return status_t
+
+ 
+
+
+
+def mostrar_amostras(caminho,index):
+    global resultados
+    image = Image.new("RGB", (320, 240), BRANCO)
+    draw = ImageDraw.Draw(image)
+
+
+    texto = "AMOSTRA " + str(index)
+    w, h = medir_texto(draw, texto, font_media)
+    y_inicio = 50   
+    x = (320 - w) // 2 
+    draw.text((x, y_inicio), texto, font=font_media, fill=PRETO)
+
+    resultado = gerarimagem(caminho)
+
+    while len(resultados) <= index:
+        resultados.append(None)
+
+    resultados[index] = resultado
+    print(f"{resultado}")
+    y_inicio = 80
+    espaco_linha = 30
+
+    for i, (classe, valor) in enumerate(resultado.items()):
+        texto = f"{classe}: {valor:.2f}%"
+        w, h = medir_texto(draw, texto, font_media)
+        x = (320 - w) // 2  # centralizado
+        y = y_inicio + i * espaco_linha
+        draw.text((x, y), texto, font=font_media, fill=PRETO)
+    display.image(image)
+   
+    
+    
+    
 
 def mostrar_parametros():
     image = Image.new("RGB", (320, 240), BRANCO)
@@ -146,29 +261,46 @@ def mostrar_parametros():
     if peso_g > 100 :
         handle_button_press()
 
-   
+    #sleep(10)
     print("Toque")
 # ===============================
 # Programa Principal
 # ===============================
 
+def processando():
+    image = Image.new("RGB", (320, 240), BRANCO)
+    draw = ImageDraw.Draw(image)
+
+
+    texto = "PROCESSSANDO... "
+    w, h = medir_texto(draw, texto, font_media)
+    y_inicio = 50   
+    x = (320 - w) // 2 
+    draw.text((x, y_inicio), texto, font=font_media, fill=PRETO)
+    display.image(image)
+    
+    
 def handle_button_press():
     camera = Camera(0)
 
     for i in range(1, 4):
         filename = f"photo_{i}.png"
-        camera.capture_photo(filename)
-        vibration()
-        sleep(8)
+        processando()
+        sleep(2)
+        #camera.capture_photo(filename)
+        mostrar_amostras(f'API/{i}.jpg', i)
+        if i in (1,2):
+            vibration()     
+        #sleep(8)
         print(f"Photo {filename} initialized and ready.")
 
     
 def main():
         try:
+           mostrar_texto_inicial()
            while True: 
-                mostrar_texto_inicial()
                 time.sleep(3)
-
+                
                 mostrar_mensagem_toque()
 
                 print("Aguardando toque na tela...")
@@ -178,10 +310,13 @@ def main():
                 # Aguarda soltar para não repetir
                 while is_touching():
                     time.sleep(0.05)
-
-                #mostrar_parametros()
-                mostrar_resultados()
+                    
+                salvar_configuracao()
+                mostrar_parametros()
                 
+                mostrar_resultados_final()
+                status1=status()
+                enviar_para_api(status1)
                 # Mantém a tela ligada
                 
 

@@ -10,6 +10,7 @@ from adafruit_rgb_display import st7789
 from time import sleep
 import configparser
 from API.ConsumoApi import ler_resultado,gerarimagem
+from API.analasyapi import enviar_para_api
 # ===============================
 # Configuração do DISPLAY
 # ===============================
@@ -248,12 +249,13 @@ def main():
                 #while is_touching():
                 time.sleep(1)
 
-                #mostrar_parametros()
+         
                 mostrar_resultados('API/1.jpg',1)
                 mostrar_resultados('API/2.jpg',2)
                 mostrar_resultados('API/3.jpg',3)
                 mostrar_resultados_final()
                 status()
+                enviar_para_api()
                 # Mantém a tela ligada
                 
 

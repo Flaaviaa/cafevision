@@ -4,7 +4,7 @@ from componentes.camera import Camera
 from time import sleep
 
 class ButtonHandler:
-	def __init__(self, button_pin = 27, led_pin = 17, device_index = 0):
+	def __init__(self, button_pin = 27, led_pin = 26, device_index = 0):
 		self.led_controller = ChangeLedState(led_pin)
 		self.camera = Camera(device_index)
 		self.button = Button(button_pin)
